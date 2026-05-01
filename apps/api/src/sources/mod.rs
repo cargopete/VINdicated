@@ -2,7 +2,6 @@ use async_trait::async_trait;
 use std::sync::Arc;
 use std::time::Duration;
 
-use crate::config::Config;
 use crate::error::SourceError;
 use crate::models::SourceData;
 
@@ -32,7 +31,7 @@ pub struct SourceRegistry {
 }
 
 impl SourceRegistry {
-    pub fn build(config: &Config) -> Self {
+    pub fn build() -> Self {
         let client = reqwest::Client::builder()
             .timeout(Duration::from_secs(15))
             .user_agent("VINdicate/0.1 (+https://vindicate-app.com)")
@@ -40,24 +39,12 @@ impl SourceRegistry {
             .expect("Failed to build HTTP client");
 
         let sources: Vec<Arc<dyn VehicleSource>> = vec![
-            // Universal (always active)
+            // Universal (always active, no auth required)
             Arc::new(universal::nhtsa_vpic::NhtsaVpic::new(client.clone())),
             Arc::new(universal::nhtsa_recalls::NhtsaRecalls::new(client.clone())),
             Arc::new(universal::eu_safety_gate::EuSafetyGate::new(client.clone())),
-            // Tier S — official free APIs
-            Arc::new(tier_s::nl_rdw::NlRdw::new(
-                client.clone(),
-                config.rdw_app_token.clone(),
-            )),
-            Arc::new(tier_s::uk_dvla::UkDvla::new(
-                client.clone(),
-                config.dvla_api_key.clone(),
-            )),
-            Arc::new(tier_s::uk_dvsa_mot::UkDvsaMot::new(
-                client.clone(),
-                config.dvsa_client_id.clone(),
-                config.dvsa_client_secret.clone(),
-            )),
+            // Tier S — official free APIs, no auth
+            Arc::new(tier_s::nl_rdw::NlRdw::new(client.clone())),
             Arc::new(tier_s::dk_dmr::DkDmr::new(client.clone())),
             Arc::new(tier_s::se_transportstyrelsen::SeTransportstyrelsen::new(client.clone())),
             Arc::new(tier_s::no_vegvesen::NoVegvesen::new(client.clone())),

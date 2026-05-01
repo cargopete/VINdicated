@@ -1,9 +1,11 @@
 import type { VehicleReport } from "@/types/report";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+// Server-side only — called from Server Components on Vercel.
+// Set API_URL in Vercel environment variables.
+const API_URL = process.env.API_URL ?? "http://localhost:8080";
 
 export async function fetchReport(vin: string): Promise<VehicleReport> {
-  const res = await fetch(`${API_BASE}/v1/vin/${vin}`, {
+  const res = await fetch(`${API_URL}/v1/vin/${vin}`, {
     next: { revalidate: 3600 },
   });
   if (!res.ok) {

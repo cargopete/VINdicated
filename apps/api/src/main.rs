@@ -27,7 +27,7 @@ async fn main() -> Result<()> {
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
             std::env::var("RUST_LOG")
-                .unwrap_or_else(|_| "vindicate_api=debug,tower_http=debug".into()),
+                .unwrap_or_else(|_| "vindicate_api=info,tower_http=info".into()),
         ))
         .with(tracing_subscriber::fmt::layer())
         .init();
@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
     let config = Config::from_env()?;
 
     let cache = Arc::new(Cache::new(&config.redis_url).await?);
-    let sources = Arc::new(SourceRegistry::build(&config));
+    let sources = Arc::new(SourceRegistry::build());
 
     let state = AppState { sources, cache };
 

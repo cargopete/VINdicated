@@ -8,10 +8,6 @@ services:
       - PORT=8080
       - REDIS_URL=redis://redis:6379
       - RUST_LOG=vindicate_api=info,tower_http=info
-      - DVLA_API_KEY=${DVLA_API_KEY:-}
-      - DVSA_CLIENT_ID=${DVSA_CLIENT_ID:-}
-      - DVSA_CLIENT_SECRET=${DVSA_CLIENT_SECRET:-}
-      - RDW_APP_TOKEN=${RDW_APP_TOKEN:-}
     depends_on:
       redis:
         condition: service_healthy
@@ -36,11 +32,8 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /var/www/certbot:/var/www/certbot:ro
     depends_on:
       - api
     networks:
