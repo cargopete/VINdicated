@@ -50,7 +50,7 @@ impl SourceRegistry {
             Arc::new(tier_s::no_vegvesen::NoVegvesen::new(client.clone())),
             Arc::new(tier_s::pl_historiapojazdu::PlHistoriaPojazdu::new(client.clone())),
             Arc::new(tier_s::cz_kontrolatachometru::CzKontrolaTachometru::new(client.clone())),
-            Arc::new(tier_s::sk_stkonline::SkStkOnline::new(client.clone())),
+            Arc::new(tier_s::sk_stkonline::SkStkonline::new(client.clone())),
             Arc::new(tier_s::si_avtolog::SiAvtolog::new(client.clone())),
             Arc::new(tier_s::ee_transpordiamet::EeTranspordiamet::new(client.clone())),
             Arc::new(tier_s::lv_csdd::LvCsdd::new(client.clone())),
